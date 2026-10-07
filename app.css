@@ -6423,112 +6423,114 @@ code, pre, .mono, [id*="uuid"], [id*="hash"] { font-family: var(--font-mono); }
 .formula-fab { position: fixed; right: 20px; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); width: 58px; height: 58px; border-radius: 50%; border: none; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 22px rgba(0, 0, 0, 0.3); cursor: pointer; z-index: 5; transition: transform 0.12s; }
 .formula-fab:active { transform: scale(0.92); }
 
+
 /* =====================================================================
-   NEUMORPHISM THEME (dark + light)
-   Replaces the previous glass dark/light look. Same data-theme switch:
-   [data-theme="dark"] (default :root) and [data-theme="light"].
-   Surfaces share the page background and are shaped purely by a pair of
-   light/dark shadows: raised = extruded, inset = pressed in.
+   NEUMORPHISM THEME — pure, single-material, dark + light
+   One monochrome surface. Light source: top-left. Depth comes ONLY from
+   a light + dark shadow pair (no borders, no blur, no colored fills).
+     convex  = raised (cards, buttons)     concave = pressed (inputs, active)
+   Color is used sparingly: accent on text/icons/indicators only.
    ===================================================================== */
 :root,
 [data-theme="dark"] {
---nm-bg: #2B2F36;
---nm-bg-alt: #30353d;
---nm-dark: #1B1E23;
---nm-light: #3B414B;
---nm-d: 6px;
---nm-b: 12px;
---nm-raised: 6px 6px 14px var(--nm-dark), -6px -6px 14px var(--nm-light);
---nm-raised-sm: 3px 3px 7px var(--nm-dark), -3px -3px 7px var(--nm-light);
---nm-raised-lg: 10px 10px 24px var(--nm-dark), -10px -10px 24px var(--nm-light);
---nm-inset: inset 4px 4px 8px var(--nm-dark), inset -4px -4px 8px var(--nm-light);
---nm-inset-sm: inset 2px 2px 5px var(--nm-dark), inset -2px -2px 5px var(--nm-light);
-
---bg-gradient: linear-gradient(var(--nm-bg), var(--nm-bg));
---glass: var(--nm-bg);
---glass-mid: var(--nm-bg);
---glass-raised: var(--nm-bg);
---glass-border: transparent;
---glass-border-strong: rgba(255, 255, 255, 0.06);
---glass-hover: var(--nm-bg-alt);
---glass-active: var(--nm-bg);
---glass-specular: transparent;
---glass-refract: transparent;
---glass-frosted: var(--nm-bg);
---text-main: #E4E8EE;
---text-strong: #FFFFFF;
---text-muted: #9AA3B2;
---text-secondary: rgba(154, 163, 178, 0.70);
---text-disabled: rgba(154, 163, 178, 0.38);
---accent: #4ADE80;
---input-bg: var(--nm-bg);
---input-border: transparent;
---card-hover: var(--nm-bg);
---shadow-xs: 2px 2px 5px var(--nm-dark), -2px -2px 5px var(--nm-light);
---shadow-sm: var(--nm-raised-sm);
---shadow: var(--nm-raised);
---shadow-lg: var(--nm-raised-lg);
---shadow-xl: 14px 14px 32px var(--nm-dark), -14px -14px 32px var(--nm-light);
---backdrop-blur: none;
---backdrop-blur-light: none;
---backdrop-blur-heavy: none;
---toggle-bg: var(--nm-bg);
---toggle-opt-active-bg: var(--nm-bg);
---toggle-opt-active-border: transparent;
+--nm-bg: #2C3036;
+--nm-hi: #32373E;            /* convex gradient: lit edge */
+--nm-lo: #262A2F;            /* convex gradient: shaded edge */
+--nm-dark: #1C1F23;
+--nm-light: #3C424A;
+--nm-groove: rgba(0, 0, 0, 0.28);
+--nm-groove-hi: rgba(255, 255, 255, 0.05);
 }
 [data-theme="light"] {
 --nm-bg: #E0E5EC;
---nm-bg-alt: #E6EBF2;
+--nm-hi: #E8EDF4;
+--nm-lo: #D6DCE5;
 --nm-dark: #A3B1C6;
 --nm-light: #FFFFFF;
---nm-raised: 6px 6px 14px var(--nm-dark), -6px -6px 14px var(--nm-light);
---nm-raised-sm: 3px 3px 7px var(--nm-dark), -3px -3px 7px var(--nm-light);
---nm-raised-lg: 10px 10px 24px var(--nm-dark), -10px -10px 24px var(--nm-light);
---nm-inset: inset 4px 4px 8px var(--nm-dark), inset -4px -4px 8px var(--nm-light);
---nm-inset-sm: inset 2px 2px 5px var(--nm-dark), inset -2px -2px 5px var(--nm-light);
+--nm-groove: rgba(163, 177, 198, 0.55);
+--nm-groove-hi: rgba(255, 255, 255, 0.9);
+}
+:root,
+[data-theme="dark"],
+[data-theme="light"] {
+--nm-convex: linear-gradient(145deg, var(--nm-hi), var(--nm-lo));
+--nm-concave: linear-gradient(145deg, var(--nm-lo), var(--nm-hi));
+--nm-raised-lg: 12px 12px 24px var(--nm-dark), -12px -12px 24px var(--nm-light);
+--nm-raised: 8px 8px 16px var(--nm-dark), -8px -8px 16px var(--nm-light);
+--nm-raised-sm: 5px 5px 10px var(--nm-dark), -5px -5px 10px var(--nm-light);
+--nm-raised-xs: 3px 3px 6px var(--nm-dark), -3px -3px 6px var(--nm-light);
+--nm-inset: inset 6px 6px 12px var(--nm-dark), inset -6px -6px 12px var(--nm-light);
+--nm-inset-sm: inset 4px 4px 8px var(--nm-dark), inset -4px -4px 8px var(--nm-light);
+--nm-inset-xs: inset 2px 2px 4px var(--nm-dark), inset -2px -2px 4px var(--nm-light);
 
 --bg-gradient: linear-gradient(var(--nm-bg), var(--nm-bg));
 --glass: var(--nm-bg);
 --glass-mid: var(--nm-bg);
 --glass-raised: var(--nm-bg);
 --glass-border: transparent;
---glass-border-strong: rgba(163, 177, 198, 0.45);
---glass-hover: var(--nm-bg-alt);
+--glass-border-strong: transparent;
+--glass-hover: var(--nm-bg);
 --glass-active: var(--nm-bg);
 --glass-specular: transparent;
 --glass-refract: transparent;
 --glass-frosted: var(--nm-bg);
---text-main: #3D4852;
---text-strong: #1F2933;
---text-muted: #6B7A8D;
---text-secondary: #8A97A8;
---text-disabled: #B3BFCD;
 --input-bg: var(--nm-bg);
 --input-border: transparent;
 --card-hover: var(--nm-bg);
---shadow-xs: 2px 2px 5px var(--nm-dark), -2px -2px 5px var(--nm-light);
---shadow-sm: var(--nm-raised-sm);
+--shadow-xs: var(--nm-raised-xs);
+--shadow-sm: var(--nm-raised-xs);
 --shadow: var(--nm-raised);
---shadow-lg: var(--nm-raised-lg);
---shadow-xl: 14px 14px 32px var(--nm-dark), -14px -14px 32px var(--nm-light);
+--shadow-lg: var(--nm-raised);
+--shadow-xl: var(--nm-raised-lg);
+--shadow-accent: none;
+--shadow-emerald: none;
+--shadow-danger: none;
 --backdrop-blur: none;
 --backdrop-blur-light: none;
 --backdrop-blur-heavy: none;
 --toggle-bg: var(--nm-bg);
 --toggle-opt-active-bg: var(--nm-bg);
 --toggle-opt-active-border: transparent;
+--highlight-bg: transparent;
+--highlight-border: transparent;
+--radius-card: 24px;
+}
+[data-theme="dark"], :root {
+--text-main: #D5DAE1;
+--text-strong: #F1F4F8;
+--text-muted: #8D96A4;
+--text-secondary: #747D8B;
+--text-disabled: #545B66;
+--accent: #5BD58C;
+--accent-emerald: #5BD58C;
+--accent-cyan: #6FD3E6;
+--accent-gold: #E5B84B;
+--danger: #EE7B7B;
+}
+[data-theme="light"] {
+--text-main: #44505E;
+--text-strong: #26313D;
+--text-muted: #6C7A8C;
+--text-secondary: #8794A6;
+--text-disabled: #A9B4C3;
+--accent: #0E9F6E;
+--accent-emerald: #0E9F6E;
+--accent-cyan: #0B8AA6;
+--accent-gold: #B9770E;
+--danger: #D64545;
 }
 
-html[data-theme], html[data-theme] body {
+html[data-theme],
+html[data-theme] body {
 background: var(--nm-bg) !important;
 background-image: none !important;
-color: var(--text-main);
 }
-html[data-theme] ::-webkit-scrollbar-track { background: transparent; }
-html[data-theme] ::-webkit-scrollbar-thumb { background: var(--nm-dark); border-radius: 4px; }
-html[data-theme] .liquid-bg-element { display: none !important; }
+html[data-theme] .liquid-bg-element,
+html[data-theme] .liquid-1, html[data-theme] .liquid-2, html[data-theme] .liquid-3 { display: none !important; }
+html[data-theme] ::-webkit-scrollbar-track { background: var(--nm-bg); box-shadow: var(--nm-inset-xs); border-radius: 4px; }
+html[data-theme] ::-webkit-scrollbar-thumb { background: var(--nm-convex); box-shadow: var(--nm-raised-xs); border-radius: 4px; }
 
-/* ---- Raised surfaces (cards, sections, panels, dialogs) ---- */
+/* ---------- RAISED (convex) surfaces ---------- */
 html[data-theme] .section,
 html[data-theme] .card,
 html[data-theme] .overview-card,
@@ -6539,6 +6541,7 @@ html[data-theme] .factory-stats-card,
 html[data-theme] .calculator-prices-card,
 html[data-theme] .chart-box,
 html[data-theme] .sales-rep-chart-box,
+html[data-theme] .chart-card,
 html[data-theme] .settings-section,
 html[data-theme] .cust-history-item,
 html[data-theme] .net-cash-dashboard,
@@ -6551,34 +6554,50 @@ html[data-theme] .settings-panel,
 html[data-theme] .modal-content,
 html[data-theme] .overlay-content,
 html[data-theme] .toast-inner,
-html[data-theme] .chart-card {
-background: var(--nm-bg) !important;
-background-image: none !important;
+html[data-theme] .formula-item,
+html[data-theme] .u-search-dropdown {
+background: var(--nm-convex) !important;
+background-color: var(--nm-bg) !important;
 border: none !important;
+outline: none !important;
 box-shadow: var(--nm-raised) !important;
 backdrop-filter: none !important;
 -webkit-backdrop-filter: none !important;
+border-radius: var(--radius-card) !important;
 }
 html[data-theme] .section:hover,
 html[data-theme] .card:hover,
 html[data-theme] .liquid-card:hover,
 html[data-theme] .entity-card-compact:hover,
 html[data-theme] .factory-history-item:hover {
-background: var(--nm-bg) !important;
+background: var(--nm-convex) !important;
 box-shadow: var(--nm-raised) !important;
+border: none !important;
 }
+html[data-theme] .section::before, html[data-theme] .section::after,
+html[data-theme] .liquid-card::before, html[data-theme] .liquid-card::after,
+html[data-theme] .card::before, html[data-theme] .card::after { display: none !important; }
 html[data-theme] .glass-confirm-box,
 html[data-theme] .factory-overlay-card { box-shadow: var(--nm-raised-lg) !important; }
 html[data-theme] .glass-confirm-backdrop,
 html[data-theme] .factory-overlay {
-background: rgba(0, 0, 0, 0.35) !important;
+background: rgba(10, 12, 16, 0.45) !important;
 backdrop-filter: none !important;
 -webkit-backdrop-filter: none !important;
 }
 html[data-theme="light"] .glass-confirm-backdrop,
-html[data-theme="light"] .factory-overlay { background: rgba(120, 135, 160, 0.35) !important; }
+html[data-theme="light"] .factory-overlay { background: rgba(110, 125, 150, 0.40) !important; }
 
-/* ---- Pressed-in (inset) surfaces: result boxes, info strips ---- */
+/* nested cards inside a raised surface sit flatter so depth doesn't stack up */
+html[data-theme] .section .card,
+html[data-theme] .section .liquid-card,
+html[data-theme] .section .entity-card-compact,
+html[data-theme] .card .card {
+box-shadow: var(--nm-raised-sm) !important;
+border-radius: 18px !important;
+}
+
+/* ---------- PRESSED (concave) surfaces ---------- */
 html[data-theme] .debt-panel,
 html[data-theme] .result-box,
 html[data-theme] .formula-display,
@@ -6588,74 +6607,121 @@ html[data-theme] .warning-message,
 html[data-theme] .credit-checkbox-container,
 html[data-theme] .discrepancy-alert,
 html[data-theme] .discrepancy-ok,
-html[data-theme] .winner-cell {
-background: var(--nm-bg) !important;
-background-image: none !important;
+html[data-theme] .winner-cell,
+html[data-theme] [style*="background:var(--glass-raised)"],
+html[data-theme] [style*="background: var(--glass-raised)"],
+html[data-theme] [style*="background:var(--input-bg)"],
+html[data-theme] [style*="background:var(--glass)"] {
+background: var(--nm-concave) !important;
+background-color: var(--nm-bg) !important;
 border: none !important;
-box-shadow: var(--nm-inset) !important;
+box-shadow: var(--nm-inset-sm) !important;
+border-radius: 16px !important;
 }
+/* dividers drawn with background:var(--glass-border) become engraved grooves */
+html[data-theme] [style*="background:var(--glass-border)"],
+html[data-theme] [style*="background: var(--glass-border)"] {
+background: var(--nm-groove) !important;
+box-shadow: 0 1px 0 var(--nm-groove-hi) !important;
+border-radius: 2px;
+}
+html[data-theme] hr { border: none !important; height: 2px; background: var(--nm-groove); box-shadow: 0 1px 0 var(--nm-groove-hi); }
 
-/* ---- Top bar, sidebar, screens ---- */
+/* ---------- Top bar, screens, sidebar ---------- */
 html[data-theme] .system-controls {
-background: var(--nm-bg) !important;
+background: var(--nm-convex) !important;
+background-color: var(--nm-bg) !important;
 border: none !important;
-box-shadow: 0 6px 14px var(--nm-dark), 0 -2px 0 var(--nm-bg) !important;
+box-shadow: 0 8px 16px var(--nm-dark) !important;
 backdrop-filter: none !important;
 -webkit-backdrop-filter: none !important;
 }
 html[data-theme] .standalone-screen,
-html[data-theme] .screen-topbar,
+html[data-theme] .screen-body,
 html[data-theme] .sidebar-scroll,
 html[data-theme] #sidebar,
 html[data-theme] .sidebar,
 html[data-theme] .overlay-header {
 background: var(--nm-bg) !important;
+background-image: none !important;
 backdrop-filter: none !important;
 -webkit-backdrop-filter: none !important;
 }
-html[data-theme] .screen-topbar { box-shadow: 0 4px 10px var(--nm-dark) !important; border: none !important; }
+html[data-theme] .screen-topbar {
+background: var(--nm-convex) !important;
+background-color: var(--nm-bg) !important;
+border: none !important;
+box-shadow: 0 6px 12px var(--nm-dark) !important;
+backdrop-filter: none !important;
+}
 
-/* ---- Inputs: pressed-in wells instead of dashed underlines ---- */
+/* ---------- INPUTS: carved wells ---------- */
 html[data-theme] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([type="color"]),
 html[data-theme] select,
 html[data-theme] textarea,
 html[data-theme] .search-bar {
 background: var(--nm-bg) !important;
+background-image: none !important;
 border: none !important;
 border-radius: 14px !important;
 box-shadow: var(--nm-inset-sm) !important;
 color: var(--text-main) !important;
-padding-left: 14px;
-padding-right: 14px;
+padding-left: 16px;
+padding-right: 16px;
 outline: none !important;
 filter: none !important;
+transition: box-shadow 0.2s ease !important;
 }
+html[data-theme] input::placeholder,
+html[data-theme] textarea::placeholder { color: var(--text-disabled) !important; }
 html[data-theme] input:not([type="checkbox"]):not([type="radio"]):focus,
 html[data-theme] select:focus,
 html[data-theme] textarea:focus,
 html[data-theme] .search-bar:focus {
 background: var(--nm-bg) !important;
 border: none !important;
-box-shadow: var(--nm-inset), 0 0 0 2px var(--accent-dim) !important;
+box-shadow: var(--nm-inset) !important;
 }
 html[data-theme] input:read-only:not([type="checkbox"]):not([type="radio"]) {
 border: none !important;
-opacity: 0.85;
+box-shadow: var(--nm-inset-xs) !important;
 }
 html[data-theme] input:-webkit-autofill,
 html[data-theme] input:-webkit-autofill:hover,
 html[data-theme] input:-webkit-autofill:focus,
 html[data-theme] input:-webkit-autofill:active {
--webkit-box-shadow: 0 0 0 1000px var(--nm-bg) inset !important;
+-webkit-box-shadow: 0 0 0 1000px var(--nm-bg) inset, var(--nm-inset-sm) !important;
 -webkit-text-fill-color: var(--text-main) !important;
 }
 html[data-theme] select option { background: var(--nm-bg); color: var(--text-main); }
 
-/* ---- Buttons: extruded, pressed on :active ---- */
+/* checkbox / radio: tiny carved wells with a raised dot when on */
+html[data-theme] input[type="checkbox"],
+html[data-theme] input[type="radio"] {
+-webkit-appearance: none; appearance: none;
+width: 22px; height: 22px; flex-shrink: 0;
+background: var(--nm-bg); border: none; outline: none;
+box-shadow: var(--nm-inset-xs);
+border-radius: 7px; position: relative; cursor: pointer;
+}
+html[data-theme] input[type="radio"] { border-radius: 50%; }
+html[data-theme] input[type="checkbox"]:checked::after,
+html[data-theme] input[type="radio"]:checked::after {
+content: ''; position: absolute; inset: 5px;
+border-radius: 4px; background: var(--accent);
+box-shadow: 0 0 6px var(--accent);
+}
+html[data-theme] input[type="radio"]:checked::after { border-radius: 50%; }
+html[data-theme] input[type="range"] { accent-color: var(--accent); }
+
+/* ---------- BUTTONS: convex keys, press into surface ---------- */
 html[data-theme] .btn,
 html[data-theme] .btn-sm,
 html[data-theme] .btn-theme,
 html[data-theme] .btn-pdf,
+html[data-theme] .btn-main,
+html[data-theme] .btn-noman,
+html[data-theme] .btn-danger,
 html[data-theme] .entity-action-btn,
 html[data-theme] .status-toggle-btn,
 html[data-theme] .metric-btn,
@@ -6664,36 +6730,55 @@ html[data-theme] .production-toggle-btn,
 html[data-theme] .glass-confirm-btn,
 html[data-theme] .tbl-action-btn,
 html[data-theme] .sidebar-settings-btn,
-html[data-theme] .sidebar-nav-btn,
-html[data-theme] .store-selector {
-background: var(--nm-bg) !important;
-background-image: none !important;
+html[data-theme] .sidebar-nav-btn {
+background: var(--nm-convex) !important;
+background-color: var(--nm-bg) !important;
 border: none !important;
+outline: none !important;
 box-shadow: var(--nm-raised-sm) !important;
 backdrop-filter: none !important;
 -webkit-backdrop-filter: none !important;
-color: var(--text-main);
-transition: box-shadow 0.15s ease, transform 0.15s ease, color 0.15s ease !important;
+color: var(--text-main) !important;
+text-shadow: none !important;
+filter: none !important;
+transition: box-shadow 0.18s ease, color 0.18s ease, transform 0.18s ease !important;
 }
-html[data-theme] .btn-theme[style*="color"],
-html[data-theme] .btn-theme[style*="border"] { border: none !important; }
+/* semantic color lives in the label only — the key itself stays the same material */
+html[data-theme] .btn-main,
+html[data-theme] .glass-confirm-btn.primary,
 html[data-theme] .tbl-action-btn { color: var(--accent) !important; }
+html[data-theme] .btn-noman { color: var(--accent-cyan) !important; }
+html[data-theme] .btn-danger,
+html[data-theme] .glass-confirm-btn.danger,
 html[data-theme] .tbl-action-btn.danger { color: var(--danger) !important; }
+html[data-theme] .btn-theme[style*="color"] { /* keep inline semantic label colors */ }
+
 html[data-theme] .btn:hover,
 html[data-theme] .btn-sm:hover,
 html[data-theme] .btn-theme:hover,
+html[data-theme] .btn-main:hover,
+html[data-theme] .btn-noman:hover,
+html[data-theme] .btn-danger:hover,
 html[data-theme] .tbl-action-btn:hover,
+html[data-theme] .tbl-action-btn.danger:hover,
 html[data-theme] .glass-confirm-btn:hover,
 html[data-theme] .sidebar-settings-btn:hover,
-html[data-theme] .sidebar-nav-btn:hover {
-background: var(--nm-bg) !important;
+html[data-theme] .sidebar-nav-btn:hover,
+html[data-theme] .entity-action-btn:hover {
+background: var(--nm-convex) !important;
+background-color: var(--nm-bg) !important;
 box-shadow: var(--nm-raised) !important;
-color: var(--accent) !important;
+filter: none !important;
 }
+html[data-theme] .tbl-action-btn:hover { color: var(--accent) !important; }
+html[data-theme] .tbl-action-btn.danger:hover { color: var(--danger) !important; }
 html[data-theme] .btn:active,
 html[data-theme] .btn-sm:active,
 html[data-theme] .btn-theme:active,
 html[data-theme] .btn-pdf:active,
+html[data-theme] .btn-main:active,
+html[data-theme] .btn-noman:active,
+html[data-theme] .btn-danger:active,
 html[data-theme] .entity-action-btn:active,
 html[data-theme] .status-toggle-btn:active,
 html[data-theme] .metric-btn:active,
@@ -6703,90 +6788,89 @@ html[data-theme] .glass-confirm-btn:active,
 html[data-theme] .tbl-action-btn:active,
 html[data-theme] .sidebar-settings-btn:active,
 html[data-theme] .sidebar-nav-btn:active {
+background: var(--nm-concave) !important;
+background-color: var(--nm-bg) !important;
 box-shadow: var(--nm-inset-sm) !important;
-transform: scale(0.98) !important;
+transform: none !important;
 }
-/* Primary / colored actions keep their hue, with neumorphic depth */
-html[data-theme] .btn-main,
-html[data-theme] .glass-confirm-btn.primary {
-background: var(--accent) !important;
-color: #0B2A17 !important;
+html[data-theme] .btn[disabled], html[data-theme] .btn-main[disabled],
+html[data-theme] button:disabled { opacity: 0.5; box-shadow: var(--nm-raised-xs) !important; }
+html[data-theme] .store-selector {
+background: var(--nm-bg) !important;
 border: none !important;
-box-shadow: var(--nm-raised-sm) !important;
-}
-html[data-theme] .btn-noman {
-background: var(--accent-cyan) !important;
-color: #06303a !important;
-border: none !important;
-box-shadow: var(--nm-raised-sm) !important;
-}
-html[data-theme] .btn-danger,
-html[data-theme] .glass-confirm-btn.danger {
-background: var(--danger) !important;
-color: #fff !important;
-border: none !important;
-box-shadow: var(--nm-raised-sm) !important;
-}
-html[data-theme] .btn-main:hover,
-html[data-theme] .btn-noman:hover,
-html[data-theme] .btn-danger:hover { box-shadow: var(--nm-raised) !important; filter: brightness(1.05); }
-html[data-theme] .btn-main:active,
-html[data-theme] .btn-noman:active,
-html[data-theme] .btn-danger:active,
-html[data-theme] .glass-confirm-btn.primary:active,
-html[data-theme] .glass-confirm-btn.danger:active {
-box-shadow: inset 3px 3px 7px rgba(0,0,0,0.30), inset -3px -3px 7px rgba(255,255,255,0.18) !important;
+box-shadow: var(--nm-inset-sm) !important;
+border-radius: 14px !important;
 }
 
-/* ---- Segmented toggles: inset track, raised active pill ---- */
+/* ---------- Segmented controls: carved track, raised thumb ---------- */
 html[data-theme] .toggle-group {
 background: var(--nm-bg) !important;
 box-shadow: var(--nm-inset-sm) !important;
 border: none !important;
-padding: 4px !important;
-border-radius: 16px !important;
+padding: 5px !important;
+border-radius: 18px !important;
 }
 html[data-theme] .toggle-opt {
 background: transparent !important;
 border: none !important;
 box-shadow: none !important;
 color: var(--text-muted) !important;
+border-radius: 14px !important;
 }
 html[data-theme] .toggle-opt:hover { background: transparent !important; color: var(--text-main) !important; }
 html[data-theme] .toggle-opt.active,
-html[data-theme] .formula-toggle-opt.active {
-background: var(--nm-bg) !important;
-box-shadow: var(--nm-raised-sm) !important;
+html[data-theme] .formula-toggle-opt.active,
+html[data-theme] .formula-toggle-opt:hover {
+background: var(--nm-convex) !important;
+background-color: var(--nm-bg) !important;
+box-shadow: var(--nm-raised-xs) !important;
 color: var(--accent) !important;
+border: none !important;
 }
-html[data-theme] .theme-toggle-track { background: var(--nm-bg) !important; box-shadow: var(--nm-inset-sm) !important; }
-html[data-theme] input:checked + .theme-toggle-track { background: var(--accent) !important; }
+html[data-theme] .theme-toggle-track {
+background: var(--nm-bg) !important;
+box-shadow: var(--nm-inset-sm) !important;
+}
+html[data-theme] .theme-toggle-track::before {
+background: var(--nm-convex) !important;
+background-color: var(--nm-bg) !important;
+box-shadow: var(--nm-raised-xs) !important;
+}
+html[data-theme] input:checked + .theme-toggle-track { background: var(--nm-bg) !important; }
+html[data-theme] input:checked + .theme-toggle-track::before { background: var(--accent) !important; box-shadow: 0 0 8px var(--accent), var(--nm-raised-xs) !important; }
 
-/* ---- Tables ---- */
-html[data-theme] table { background: transparent !important; border-color: transparent !important; }
+/* ---------- Tables: no borders, engraved row seams ---------- */
+html[data-theme] table { background: transparent !important; border: none !important; border-collapse: separate; border-spacing: 0; }
 html[data-theme] thead,
-html[data-theme] .comp-table th { background: var(--nm-bg) !important; background-image: none !important; }
-html[data-theme] th, html[data-theme] td { border-color: rgba(128, 140, 160, 0.18) !important; }
+html[data-theme] .comp-table th,
+html[data-theme] .u-thead-bg { background: var(--nm-bg) !important; background-image: none !important; }
+html[data-theme] th { color: var(--text-muted) !important; border: none !important; box-shadow: 0 2px 0 var(--nm-groove), 0 3px 0 var(--nm-groove-hi); }
+html[data-theme] td { border: none !important; box-shadow: 0 1px 0 var(--nm-groove), 0 2px 0 var(--nm-groove-hi); }
 html[data-theme] tbody tr:hover,
-html[data-theme] .comp-table tbody tr:hover td { background: var(--nm-bg-alt) !important; }
+html[data-theme] .comp-table tbody tr:hover td { background: transparent !important; }
 
-/* ---- Badges / chips: small extruded pills ---- */
+/* ---------- Badges / chips: small carved pills, colored label only ---------- */
 html[data-theme] .store-badge, html[data-theme] .payment-badge, html[data-theme] .seller-badge,
 html[data-theme] .transaction-badge, html[data-theme] .noran-badge, html[data-theme] .noman-badge,
 html[data-theme] .factory-badge, html[data-theme] .factory-badge-std, html[data-theme] .factory-badge-asn,
-html[data-theme] .entity-type-badge, html[data-theme] .supply-tag, html[data-theme] .entity-chip {
-box-shadow: var(--nm-raised-sm) !important;
+html[data-theme] .entity-type-badge, html[data-theme] .supply-tag, html[data-theme] .entity-chip,
+html[data-theme] .status-badge, html[data-theme] .badge,
+html[data-theme] .units-available-indicator, html[data-theme] .received-indicator {
+background: var(--nm-bg) !important;
+background-image: none !important;
 border: none !important;
+box-shadow: var(--nm-inset-xs) !important;
 }
 
-/* ---- Splash & chrome ---- */
-html[data-theme="dark"] #splash-screen,
-html[data-theme="dark"] #splash-screen {
---sp-solid: #2B2F36;
---sp-bg: #2B2F36;
+/* ---------- Toasts, banners ---------- */
+html[data-theme] #offline-banner {
+background: var(--nm-convex) !important;
+background-color: var(--nm-bg) !important;
+border: none !important;
+box-shadow: var(--nm-raised-sm) !important;
 }
-html[data-theme="light"] #splash-screen {
---sp-solid: #E0E5EC;
---sp-bg: #E0E5EC;
-}
-html[data-theme] #offline-banner { background: var(--nm-bg) !important; box-shadow: var(--nm-raised-sm) !important; border: none !important; }
+
+/* ---------- Splash ---------- */
+html[data-theme] #splash-screen { --sp-solid: var(--nm-bg); --sp-bg: var(--nm-bg); --sp-track: var(--nm-dark); }
+html[data-theme="dark"] #splash-screen { --sp-ink: #5BD58C; --sp-text: #D5DAE1; --sp-muted: #8D96A4; }
+html[data-theme="light"] #splash-screen { --sp-ink: #0E9F6E; --sp-text: #44505E; --sp-muted: #6C7A8C; }
