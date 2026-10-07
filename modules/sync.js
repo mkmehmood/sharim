@@ -3928,7 +3928,7 @@ ${_showGoogle ? `<div class="auth-divider"><span>or</span></div>
 <div id="gsi-btn-container" style="display:none;"></div>` : ''}
 <p class="auth-help">No account? <strong>Contact the administrator</strong> to have yours added.</p>
 <div class="auth-secure">
-<svg width="14" height="14" viewBox="0 0 36 36" fill="none" aria-hidden="true"><path d="M18 3 L30 8 V18 C30 25 24 31 18 33 C12 31 6 25 6 18 V8 Z" fill="currentColor" opacity="0.14" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12.5 18.5l4 4 7-8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
 <span>End-to-end encrypted &middot; AES-256-GCM</span>
 </div>
 </div>
