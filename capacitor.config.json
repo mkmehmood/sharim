@@ -1,0 +1,26 @@
+{
+  "appId": "com.gullzubair.sarim",
+  "appName": "Gull & Zubair",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https",
+    "hostname": "mkmehmood.github.io"
+  },
+  "android": {
+    "allowMixedContent": false,
+    "backgroundColor": "#0F172A"
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0,
+      "launchAutoHide": true,
+      "backgroundColor": "#E8ECF0",
+      "showSpinner": false
+    },
+    "StatusBar": {
+      "style": "DARK",
+      "backgroundColor": "#1D4ED8",
+      "overlaysWebView": false
+    }
+  }
+}

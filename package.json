@@ -1,0 +1,51 @@
+{
+  "name": "sarim",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Gull and Zubair Naswar Dealers — offline-first PWA for production, sales, inventory and credits.",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "node scripts/serve.js",
+    "start": "node scripts/serve.js",
+    "lint": "node --check modules/*.js scripts/*.js tests/*.test.js sw.js build.js && node scripts/verify.js",
+    "build": "node build.js",
+    "verify": "node scripts/verify.js",
+    "test": "node --test tests/*.test.js",
+    "check": "npm run verify && npm test && npm run build && npm run verify -- dist",
+    "serve": "node scripts/serve.js",
+    "serve:dist": "node scripts/serve.js dist",
+    "android:sync": "npm run build && npx cap sync android",
+    "android:apk": "npm run android:sync && cd android && ./gradlew assembleRelease"
+  },
+  "devDependencies": {
+    "@capacitor/android": "^8.5.2",
+    "@capacitor/cli": "^8.5.2",
+    "@fontsource-variable/cinzel": "^5.3.0",
+    "@fontsource-variable/jetbrains-mono": "^5.3.0",
+    "@fontsource-variable/manrope": "^5.3.0",
+    "@fontsource-variable/playfair-display": "^5.3.0",
+    "@fontsource-variable/plus-jakarta-sans": "^5.3.0",
+    "@fontsource/noto-nastaliq-urdu": "^5.3.0",
+    "esbuild": "^0.25.0"
+  },
+  "dependencies": {
+    "@capacitor/app": "^8.1.1",
+    "@capacitor/camera": "^8.2.4",
+    "@capacitor/core": "^8.5.2",
+    "@capacitor/filesystem": "^8.1.3",
+    "@capacitor/geolocation": "^8.2.2",
+    "@capacitor/haptics": "^8.0.2",
+    "@capacitor/keyboard": "^8.0.5",
+    "@capacitor/local-notifications": "^8.3.1",
+    "@capacitor/network": "^8.0.1",
+    "@capacitor/share": "^8.0.2",
+    "@capacitor/splash-screen": "^8.0.2",
+    "@capacitor/status-bar": "^8.0.3",
+    "@capgo/capacitor-native-biometric": "^8.7.0",
+    "jspdf": "^2.5.1",
+    "jspdf-autotable": "^3.5.31"
+  }
+}

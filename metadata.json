@@ -1,0 +1,8 @@
+{
+  "name": "Gull and Zubair Naswar Dealers",
+  "description": "Offline-first PWA for business management, production tracking, sales, inventory, and credits.",
+  "permissions": [],
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

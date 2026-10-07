@@ -1,0 +1,75 @@
+name: Android APK
+on:
+  push:
+    branches: [main]
+    paths-ignore: ['README.md']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: android-apk
+  cancel-in-progress: true
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      HAS_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE_BASE64 != '' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - uses: actions/setup-java@v5
+        with: { distribution: temurin, java-version: 21, cache: gradle }
+      - name: Prepare Android SDK
+        run: |
+          SDK="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
+          echo "ANDROID_HOME=$SDK" >> "$GITHUB_ENV"
+          echo "sdk.dir=$SDK" > android/local.properties
+          MGR="$SDK/cmdline-tools/latest/bin/sdkmanager"
+          [ -x "$MGR" ] || MGR="$(command -v sdkmanager || true)"
+          if [ -n "$MGR" ]; then
+            yes | "$MGR" --licenses > /dev/null || true
+            "$MGR" "platforms;android-36" "build-tools;36.0.0" > /dev/null || true
+          fi
+      - run: npm ci
+      - run: npm run check
+      - run: npx cap sync android
+      - name: Use custom signing key (optional)
+        if: env.HAS_KEYSTORE == 'true'
+        run: |
+          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > "$RUNNER_TEMP/release.keystore"
+          echo "SARIM_KEYSTORE_FILE=$RUNNER_TEMP/release.keystore" >> "$GITHUB_ENV"
+          echo "SARIM_KEYSTORE_PASSWORD=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> "$GITHUB_ENV"
+          echo "SARIM_KEY_ALIAS=${{ secrets.ANDROID_KEY_ALIAS }}" >> "$GITHUB_ENV"
+          echo "SARIM_KEY_PASSWORD=${{ secrets.ANDROID_KEY_PASSWORD }}" >> "$GITHUB_ENV"
+      - name: Build release APK
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          set -o pipefail
+          ./gradlew --no-daemon --stacktrace assembleRelease \
+            -PappVersionCode=${{ github.run_number }} \
+            -PappVersionName=1.0.${{ github.run_number }} 2>&1 | tee "$RUNNER_TEMP/gradle.log"
+      - name: Report build errors
+        if: failure()
+        run: |
+          grep -n -E "What went wrong|error:|FAILED|Could not|Caused by|> " "$RUNNER_TEMP/gradle.log" 2>/dev/null | head -25 | while IFS= read -r l; do echo "::error::${l:0:400}"; done || true
+      - name: Name the APK
+        run: |
+          mkdir -p out
+          cp android/app/build/outputs/apk/release/app-release.apk "out/Gull-Zubair-1.0.${{ github.run_number }}.apk"
+          cp android/app/build/outputs/apk/release/app-release.apk "out/Gull-Zubair-latest.apk"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Gull-Zubair-apk
+          path: out/*.apk
+      - name: Publish to Releases
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete android-latest --yes --cleanup-tag || true
+          gh release create android-latest out/*.apk \
+            --title "Gull & Zubair Android app (build ${{ github.run_number }})" \
+            --notes "Install the latest APK on your Android phone. Updates install over the previous version and keep your data." \
+            --target "${{ github.sha }}"

@@ -1,0 +1,84 @@
+name: Desktop apps
+on:
+  push:
+    branches: [main]
+    paths-ignore: ['README.md']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: desktop-apps
+  cancel-in-progress: true
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            desktop/package-lock.json
+      - run: npm ci
+      - run: npm run build
+      - name: Stage web app into the desktop shell
+        shell: bash
+        run: |
+          rm -rf desktop/app
+          mkdir -p desktop/app
+          cp -R dist/. desktop/app/
+          rm -f desktop/app/sw.js
+      - name: Install desktop dependencies
+        working-directory: desktop
+        run: npm ci
+      - name: Build installers
+        working-directory: desktop
+        shell: bash
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+        run: |
+          set -o pipefail
+          npx electron-builder --publish never 2>&1 | tee "$RUNNER_TEMP/builder.log"
+      - name: Report build errors
+        if: failure()
+        shell: bash
+        run: |
+          grep -n -i -E "error|cannot|failed|invalid|unknown|must|ENOENT" "$RUNNER_TEMP/builder.log" 2>/dev/null | head -15 | while IFS= read -r l; do echo "::error::${l:0:400}"; done || true
+      - name: Collect installers
+        shell: bash
+        run: |
+          mkdir -p out
+          find desktop/release -maxdepth 1 -type f \( -name "*.exe" -o -name "*.dmg" -o -name "*.zip" -o -name "*.AppImage" -o -name "*.deb" \) -exec cp {} out/ \;
+          ls -la out
+      - uses: actions/upload-artifact@v4
+        with:
+          name: desktop-${{ matrix.os }}
+          path: out/*
+          if-no-files-found: error
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: assets
+          pattern: desktop-*
+          merge-multiple: true
+      - name: Publish desktop release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          ls -la assets
+          gh release delete desktop-latest --yes --cleanup-tag || true
+          gh release create desktop-latest assets/* \
+            --title "Gull & Zubair desktop apps (build ${{ github.run_number }})" \
+            --notes "Windows: Setup .exe (installer) or portable .exe. macOS: .dmg. Linux: .AppImage or .deb. Unsigned builds: on Windows choose More info > Run anyway; on macOS right-click the app and choose Open." \
+            --target "${{ github.sha }}"

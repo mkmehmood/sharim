@@ -1,0 +1,103 @@
+{
+  "name": "gull-zubair-desktop",
+  "version": "1.0.0",
+  "description": "Gull & Zubair Naswar Dealers - desktop app",
+  "main": "main.js",
+  "author": {
+    "name": "Gull and Zubair",
+    "email": "support@gullzubair.example"
+  },
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --publish never"
+  },
+  "devDependencies": {
+    "electron": "^44.5.1",
+    "electron-builder": "^26.15.3"
+  },
+  "build": {
+    "appId": "com.gullzubair.sarim.desktop",
+    "productName": "Gull and Zubair",
+    "copyright": "Gull & Zubair Naswar Dealers",
+    "directories": {
+      "output": "release",
+      "buildResources": "build"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "app/**/*",
+      "package.json"
+    ],
+    "artifactName": "Gull-Zubair-Desktop-${os}-${arch}.${ext}",
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "perMachine": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "differentialPackage": false
+    },
+    "portable": {
+      "artifactName": "Gull-Zubair-Desktop-${os}-${arch}-portable.${ext}"
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg"
+        },
+        {
+          "target": "zip"
+        }
+      ],
+      "category": "public.app-category.business",
+      "icon": "build/icon.png",
+      "identity": null
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "deb",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "category": "Office",
+      "icon": "build/icon.png",
+      "maintainer": "Gull & Zubair",
+      "synopsis": "Business management app"
+    },
+    "publish": null
+  },
+  "homepage": "https://mkmehmood.github.io/sarim/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mkmehmood/sarim.git"
+  }
+}
