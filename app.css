@@ -6874,3 +6874,230 @@ box-shadow: var(--nm-raised-sm) !important;
 html[data-theme] #splash-screen { --sp-solid: var(--nm-bg); --sp-bg: var(--nm-bg); --sp-track: var(--nm-dark); }
 html[data-theme="dark"] #splash-screen { --sp-ink: #5BD58C; --sp-text: #D5DAE1; --sp-muted: #8D96A4; }
 html[data-theme="light"] #splash-screen { --sp-ink: #0E9F6E; --sp-text: #44505E; --sp-muted: #6C7A8C; }
+
+/* =====================================================================
+   TACTILE INSTRUMENT — design language layered on the Neumorphic base
+   Soft hardware: a precision instrument milled from one block of
+   material. Ideas:
+     1. LIGHT   – a real light source (top-left falloff) + beveled edges
+     2. GRAIN   – micro-texture so the surface feels manufactured
+     3. LAMPS   – color only appears as lit indicators (LEDs), never fills
+     4. ENGRAVE – labels are etched caps; readouts are recessed displays
+     5. TRAVEL  – keys physically depress with a springy return
+   ===================================================================== */
+:root,
+[data-theme="dark"] {
+--nm-edge-hi: rgba(255, 255, 255, 0.075);
+--nm-edge-lo: rgba(0, 0, 0, 0.40);
+--nm-ambient: rgba(255, 255, 255, 0.045);
+--nm-grain-opacity: 0.07;
+--nm-etch-hi: rgba(255, 255, 255, 0.07);
+--nm-etch-lo: rgba(0, 0, 0, 0.55);
+}
+[data-theme="light"] {
+--nm-edge-hi: rgba(255, 255, 255, 0.95);
+--nm-edge-lo: rgba(140, 156, 180, 0.38);
+--nm-ambient: rgba(255, 255, 255, 0.65);
+--nm-grain-opacity: 0.05;
+--nm-etch-hi: rgba(255, 255, 255, 0.95);
+--nm-etch-lo: rgba(130, 146, 170, 0.30);
+}
+:root,
+[data-theme="dark"],
+[data-theme="light"] {
+--nm-glow: color-mix(in srgb, var(--accent) 60%, transparent);
+--nm-glow-soft: color-mix(in srgb, var(--accent) 16%, transparent);
+--nm-bevel: inset 1px 1px 1px var(--nm-edge-hi), inset -1px -1px 1px var(--nm-edge-lo);
+--nm-raised-lg: 14px 14px 28px var(--nm-dark), -14px -14px 28px var(--nm-light), var(--nm-bevel);
+--nm-raised: 9px 9px 18px var(--nm-dark), -9px -9px 18px var(--nm-light), var(--nm-bevel);
+--nm-raised-sm: 5px 5px 11px var(--nm-dark), -5px -5px 11px var(--nm-light), var(--nm-bevel);
+--nm-raised-xs: 3px 3px 6px var(--nm-dark), -3px -3px 6px var(--nm-light), var(--nm-bevel);
+--nm-inset-sm: inset 4px 4px 9px var(--nm-dark), inset -4px -4px 9px var(--nm-light), 1px 1px 0 var(--nm-edge-hi);
+--nm-inset-xs: inset 2px 2px 5px var(--nm-dark), inset -2px -2px 5px var(--nm-light), 1px 1px 0 var(--nm-edge-hi);
+--nm-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* 1 · LIGHT — ambient falloff from the top-left, like a desk lamp */
+html[data-theme] body {
+background:
+radial-gradient(120% 70% at 0% 0%, var(--nm-ambient), transparent 60%),
+radial-gradient(90% 60% at 100% 100%, rgba(0, 0, 0, 0.10), transparent 60%),
+var(--nm-bg) !important;
+background-attachment: fixed !important;
+}
+
+/* 2 · GRAIN — fine manufactured micro-texture over everything (non-interactive) */
+html[data-theme]::after {
+content: '';
+position: fixed; inset: 0;
+pointer-events: none;
+z-index: 2147483000;
+opacity: var(--nm-grain-opacity);
+mix-blend-mode: overlay;
+background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .5  0 0 0 0 .5  0 0 0 0 .5  0 0 0 1.1 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+/* Cards get a glossy specular hairline along the lit (top) edge */
+html[data-theme] .section,
+html[data-theme] .card,
+html[data-theme] .liquid-card,
+html[data-theme] .overview-card,
+html[data-theme] .net-cash-dashboard { position: relative; }
+html[data-theme] .section::before,
+html[data-theme] .liquid-card::before,
+html[data-theme] .card::before,
+html[data-theme] .overview-card::before,
+html[data-theme] .net-cash-dashboard::before {
+content: '' !important;
+display: block !important;
+position: absolute; left: 22px; right: 22px; top: 0; height: 1px;
+background: linear-gradient(90deg, transparent, var(--nm-edge-hi) 25%, var(--nm-edge-hi) 75%, transparent);
+opacity: 1; pointer-events: none; border-radius: 1px;
+}
+
+/* 4 · ENGRAVE — section titles are etched caps with an LED in a socket */
+html[data-theme] .section-header h2,
+html[data-theme] .section-header h3,
+html[data-theme] .section-header > span:first-child {
+font-family: var(--font-ui) !important;
+font-size: 0.74rem !important;
+font-weight: 800 !important;
+letter-spacing: 0.16em !important;
+text-transform: uppercase;
+color: var(--text-muted) !important;
+text-shadow: 0 1px 0 var(--nm-etch-hi), 0 -1px 0 var(--nm-etch-lo);
+display: inline-flex; align-items: center; gap: 12px;
+}
+html[data-theme] .section-header h2::before,
+html[data-theme] .section-header h3::before {
+content: '';
+width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0;
+background: var(--accent);
+box-shadow: 0 0 0 3px var(--nm-bg), 0 0 0 4px var(--nm-edge-lo), 0 0 10px 1px var(--nm-glow), inset 0 1px 1px rgba(255,255,255,0.55);
+animation: nm-lamp 3.2s ease-in-out infinite;
+}
+@keyframes nm-lamp { 0%, 100% { filter: brightness(1); } 50% { filter: brightness(0.78); } }
+html[data-theme] .screen-title { letter-spacing: 0.08em; text-shadow: 0 1px 0 var(--nm-etch-hi), 0 -1px 0 var(--nm-etch-lo); }
+html[data-theme] label,
+html[data-theme] .u-label-sm,
+html[data-theme] .settings-group-label,
+html[data-theme] .sidebar-section-label,
+html[data-theme] .factory-summary-label {
+text-shadow: 0 1px 0 var(--nm-etch-hi);
+letter-spacing: 0.06em;
+}
+
+/* Readouts: recessed display windows with a faint lit-glass glow */
+html[data-theme] .result-box,
+html[data-theme] .formula-display,
+html[data-theme] .production-unit-info,
+html[data-theme] .debt-panel {
+box-shadow: var(--nm-inset-sm), inset 0 0 28px var(--nm-glow-soft) !important;
+}
+html[data-theme] .net-cash-dashboard {
+box-shadow: var(--nm-raised-lg) !important;
+}
+html[data-theme] .net-cash-value,
+html[data-theme] .stat-value,
+html[data-theme] .metric-value,
+html[data-theme] .amount-value {
+filter: drop-shadow(0 0 12px var(--nm-glow-soft));
+}
+html[data-theme] .formula-value { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+/* 3 · LAMPS — primary/danger keys carry a lit indicator instead of a fill */
+html[data-theme] .btn-main::before,
+html[data-theme] .btn-noman::before,
+html[data-theme] .btn-danger::before,
+html[data-theme] .glass-confirm-btn.primary::before,
+html[data-theme] .glass-confirm-btn.danger::before {
+content: '';
+display: inline-block; vertical-align: middle;
+width: 7px; height: 7px; margin-inline-end: 9px; border-radius: 50%;
+background: currentColor;
+box-shadow: 0 0 0 2px var(--nm-bg), 0 0 0 3px var(--nm-edge-lo), 0 0 9px 1px currentColor;
+}
+html[data-theme] .btn-main { text-shadow: 0 0 14px var(--nm-glow-soft) !important; }
+
+/* 5 · TRAVEL — keys depress and spring back */
+html[data-theme] .btn,
+html[data-theme] .btn-sm,
+html[data-theme] .btn-theme,
+html[data-theme] .btn-main,
+html[data-theme] .btn-noman,
+html[data-theme] .btn-danger,
+html[data-theme] .btn-pdf,
+html[data-theme] .tbl-action-btn,
+html[data-theme] .entity-action-btn,
+html[data-theme] .glass-confirm-btn,
+html[data-theme] .sidebar-nav-btn,
+html[data-theme] .sidebar-settings-btn,
+html[data-theme] .metric-btn,
+html[data-theme] .percentage-toggle-btn,
+html[data-theme] .production-toggle-btn,
+html[data-theme] .status-toggle-btn {
+background:
+linear-gradient(180deg, rgba(255, 255, 255, 0.07), transparent 45%),
+var(--nm-convex) !important;
+background-color: var(--nm-bg) !important;
+border-radius: 16px !important;
+transition: box-shadow 0.22s var(--nm-spring), transform 0.22s var(--nm-spring), color 0.2s ease !important;
+}
+html[data-theme] .btn:active,
+html[data-theme] .btn-sm:active,
+html[data-theme] .btn-theme:active,
+html[data-theme] .btn-main:active,
+html[data-theme] .btn-noman:active,
+html[data-theme] .btn-danger:active,
+html[data-theme] .btn-pdf:active,
+html[data-theme] .tbl-action-btn:active,
+html[data-theme] .entity-action-btn:active,
+html[data-theme] .glass-confirm-btn:active,
+html[data-theme] .sidebar-nav-btn:active,
+html[data-theme] .sidebar-settings-btn:active,
+html[data-theme] .metric-btn:active,
+html[data-theme] .percentage-toggle-btn:active,
+html[data-theme] .production-toggle-btn:active,
+html[data-theme] .status-toggle-btn:active {
+background: var(--nm-concave) !important;
+background-color: var(--nm-bg) !important;
+transform: translateY(1px) scale(0.985) !important;
+}
+html[data-theme] .btn-main:active::before,
+html[data-theme] .btn-noman:active::before,
+html[data-theme] .btn-danger:active::before { box-shadow: 0 0 0 2px var(--nm-bg), 0 0 0 3px var(--nm-edge-lo), 0 0 16px 3px currentColor; }
+
+/* Segmented control: thumb is a raised cap with a lit tab beneath it */
+html[data-theme] .toggle-opt { position: relative; transition: color 0.2s ease, box-shadow 0.25s var(--nm-spring) !important; }
+html[data-theme] .toggle-opt.active::after,
+html[data-theme] .formula-toggle-opt.active::after {
+content: '';
+position: absolute; left: 50%; bottom: 4px; width: 14px; height: 3px; margin-left: -7px;
+border-radius: 2px; background: var(--accent);
+box-shadow: 0 0 8px 1px var(--nm-glow);
+}
+
+/* Inputs: when focused the well "powers on" with a lit rim */
+html[data-theme] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):focus,
+html[data-theme] select:focus,
+html[data-theme] textarea:focus,
+html[data-theme] .search-bar:focus {
+box-shadow:
+inset 4px 4px 9px var(--nm-dark),
+inset -4px -4px 9px var(--nm-light),
+0 0 0 1px color-mix(in srgb, var(--accent) 55%, transparent),
+0 0 16px color-mix(in srgb, var(--accent) 22%, transparent) !important;
+}
+html[data-theme] input[type="checkbox"]:checked,
+html[data-theme] input[type="radio"]:checked { box-shadow: var(--nm-inset-xs), 0 0 10px var(--nm-glow-soft); }
+
+/* Table header becomes an etched rail */
+html[data-theme] th {
+font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase;
+text-shadow: 0 1px 0 var(--nm-etch-hi);
+}
+
+@media (prefers-reduced-motion: reduce) {
+html[data-theme] .section-header h2::before,
+html[data-theme] .section-header h3::before { animation: none; }
+}
